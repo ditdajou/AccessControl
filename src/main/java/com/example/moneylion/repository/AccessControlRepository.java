@@ -18,13 +18,15 @@ public class AccessControlRepository {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public boolean getAccessDetails(String email, String featureName) {
+        boolean enableAccess = false;
         try {
             this.getAccessFeature(featureName);
+            final String sql = "SELECT enable_access FROM feature_access WHERE email = ? AND feature_name = ? ";
+            enableAccess = jdbcTemplate.queryForObject(sql, boolean.class, new Object[]{email, featureName});
         } catch (EmptyResultDataAccessException ex) {
-            return false;
+            return enableAccess;
         }
-        final String sql = "SELECT enable_access FROM feature_access WHERE email = ? AND feature_name = ? ";
-        return jdbcTemplate.queryForObject(sql, boolean.class, new Object[]{email, featureName});
+        return enableAccess;
     }
 
     private String getAccessFeature(String featureName) {
