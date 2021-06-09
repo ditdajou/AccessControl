@@ -7,11 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccessControlServices {
 
     @Autowired
     AccessControlRepository repository;
+
+    public List<ModifyAccessRequest> getAccessDetails() {
+        return repository.getAccessDetails();
+    }
 
     public GetAccessDetailsResponse getAccessDetails(String email, String featureName) {
         boolean canAccess = repository.getAccessDetails(email, featureName);

@@ -14,6 +14,11 @@ public class AccessControlController {
     @Autowired
     AccessControlServices services;
 
+    @GetMapping(value = "/features")
+    public ResponseEntity getAccessDetails() {
+        return ResponseEntity.ok(services.getAccessDetails());
+    }
+
     @GetMapping(value = "/feature")
     public ResponseEntity getAccessDetails(
             @RequestParam(name = "email") String email,

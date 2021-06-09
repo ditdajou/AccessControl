@@ -1,12 +1,20 @@
 package com.example.moneylion.repository;
 
+import com.example.moneylion.model.ModifyAccessRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.StringJoiner;
+
 import static org.apache.commons.lang3.StringUtils.SPACE;
 
 @Repository
@@ -27,6 +35,30 @@ public class AccessControlRepository {
             return enableAccess;
         }
         return enableAccess;
+    }
+
+    public List<ModifyAccessRequest> getAccessDetails() {
+        final String sql = "SELECT * FROM feature_access LIMIT 1000";
+
+
+        return jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper(ModifyAccessRequest.class)
+        );
+        /*
+        return jdbcTemplate.query(sql,
+                new RowMapper<ModifyAccessRequest>() {
+                    @Override
+                    public ModifyAccessRequest mapRow(ResultSet rs, int i) throws SQLException {
+                        ModifyAccessRequest record = new ModifyAccessRequest();
+
+                        record.setFeatureName(rs.getString("feature_Name"));
+                        record.setEmail(rs.getString("email"));
+                        record.setEnable(rs.getBoolean("enable_access"));
+
+                        return record;
+                    }
+                });
+                */
     }
 
     private String getAccessFeature(String featureName) {
