@@ -1,12 +1,16 @@
 package com.example.moneylion.repository;
 
+import com.example.moneylion.model.ModifyAccessRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.StringJoiner;
+
 import static org.apache.commons.lang3.StringUtils.SPACE;
 
 @Repository
@@ -53,5 +57,16 @@ public class AccessControlRepository {
         parameters.addValue("enable_access", isEnabled);
 
         return namedParameterJdbcTemplate.update(sql, parameters);
+    }
+
+    private List<ModifyAccessRequest> getAccessFeature2() {
+        final String sql = "SELECT * FROM feature_details LIMIT 1000";
+        return jdbcTemplate.query(sql,
+                (rs, rowNum) ->
+                        new ModifyAccessRequest(
+                                rs.getString("feature_Name"),
+                                rs.getString("email"),
+                                rs.getBoolean("enable_access")
+                        ));
     }
 }
