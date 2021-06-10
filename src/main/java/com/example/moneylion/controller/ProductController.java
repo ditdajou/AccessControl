@@ -13,7 +13,7 @@ public class ProductController {
     ProductServices services;
 
     @GetMapping(value = "/product/")
-    public ResponseEntity getProduct(@RequestParam(name = "productId") String productId) {
-        return ResponseEntity.ok(services.getProduct(productId));
+    public ResponseEntity getProduct(@RequestParam(name = "title") String title) {
+        return ResponseEntity.ok(services.getProduct(title));
     }
 }
